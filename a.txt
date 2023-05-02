@@ -1,3 +1,7 @@
 git add .
 git commit -m "加這個檔案做了甚麼"
 git push
+(如何上傳資料)
+
+git pull
+(如何下載資料)
