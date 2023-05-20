@@ -5,3 +5,8 @@ git push
 
 git pull
 (如何下載資料)
+
+conda activate nkust1112web78
+
+
+python manage.py runserver
