@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from mysite import views   # 從views.py去匯入所有的處理函式
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index ), # 如果有人來瀏覽首頁的話，請交給views.py裡面的index()函式處理
+
 ]
