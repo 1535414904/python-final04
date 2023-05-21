@@ -13,16 +13,18 @@ def nkustnews(request):
     return render(request, "nkustnews.html", locals())
 
 def all_data(request):
-    url = "https://opendata.hccg.gov.tw/OpenDataFileHit.ashx?ID=48DEDBDAC3A31FC6&u=77DFE16E459DFCE3F5CEA2F931E333F7E23D5729EF83D5F20744125E844FB27044F9892E6F09372518441B3BB84260426ADE242A57DFB9E8C9A50C50134F4F47"
-
-    r = requests.get(url)         
-    data = json.loads(r.text)     
+    url = "https://api.kcg.gov.tw/api/service/get/671f3133-fae1-41f4-afc4-4bae95c1889d"
+    r = requests.get(url)         # 實際擷取網頁的內容
+    data1 = json.loads(r.text)     # 把網頁的文字轉換成JSON格式，放到data變數裡面
+    car_data = data1['data'] # bicycle_data現在是串列格式，目前共有70筆項目
     msg = ""
-    msg = "<h2>新竹市自行車可用資訊" + data['updated_at'] + "</h2><hr>"   
-    bicycle_data = data['retVal'] 
-    msg = msg + "<table><tr bgcolor=#aaaaaa><td>站名</td><td>可用數量</td></tr>"
-    for item in bicycle_data:
-        msg = msg + "<tr bgcolor=#33ff33><td>{}</td><td>{}/{}</td></tr>".format(item['sna'].split("_")[1], item['sbi'], item['tot'])
+    msg = "<h2>車禍資訊"  + "</h2><hr>"   
+    msg = msg + "<table><tr bgcolor=#aaaaaa><td>編號</td><td>發生日期</td><td>原因</td><td>事故類別</td><td>速限</td><td>路面狀態說明</td><td>天候說明</td></tr>"
+    for item in car_data:
+        if item['事故類型及型態說明']and item['發生日期']and item['事故類型及型態說明']!="":
+            msg = msg + "<tr bgcolor=#33ff33><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(  item['seq'], 
+                item['發生日期'], 
+                item['事故類型及型態說明'],item['事故類別'],item['速限'],item['路面狀態說明'],item['天候說明'])
     msg = msg + "</table>"
     return HttpResponse(msg)
 
