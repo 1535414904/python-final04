@@ -5,7 +5,9 @@ import json       # 匯入操作JSON格式所需要的模組
 from mysite import models  # 從 mysite 的資料夾中的 models.py 匯入所有的類別（資料表）
 import random     # 匯入隨機模組
 
-def index(request):    
+def index(request):
+    mynames = ["第四組"]
+    myname = random.choice(mynames)
     return render(request, "index.html", locals())
 
 def nkustnews(request):
