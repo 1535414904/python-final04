@@ -15,20 +15,84 @@ def nkustnews(request):
     return render(request, "nkustnews.html", locals())
 
 def all_data(request):
-    url = "https://api.kcg.gov.tw/api/service/get/671f3133-fae1-41f4-afc4-4bae95c1889d"
-    r = requests.get(url)         # 實際擷取網頁的內容
-    data1 = json.loads(r.text)     # 把網頁的文字轉換成JSON格式，放到data變數裡面
-    car_data = data1['data'] # bicycle_data現在是串列格式，目前共有70筆項目
-    msg = ""
-    msg = "<h2>車禍資訊"  + "</h2><hr>"   
-    msg = msg + "<table><tr bgcolor=#aaaaaa><td>編號</td><td>發生日期</td><td>原因</td><td>事故類別</td><td>速限</td><td>路面狀態說明</td><td>天候說明</td></tr>"
-    for item in car_data:
-        if item['事故類型及型態說明']and item['發生日期']and item['事故類型及型態說明']!="":
-            msg = msg + "<tr bgcolor=#33ff33><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(  item['seq'], 
-                item['發生日期'], 
-                item['事故類型及型態說明'],item['事故類別'],item['速限'],item['路面狀態說明'],item['天候說明'])
-    msg = msg + "</table>"
+    car_data=list()
+    urls = ["https://api.kcg.gov.tw/api/service/get/0ba09913-7e69-469f-b7eb-1140e493d0a0",
+            "https://api.kcg.gov.tw/api/service/get/1a31f2d8-7b7e-4802-a06e-b262a9f68983",
+            "https://api.kcg.gov.tw/api/service/get/d480fcaf-a9d1-42cd-a36b-6f248c30fe7d",
+            "https://api.kcg.gov.tw/api/service/get/a61991be-6ebe-471c-a62f-ad293f23d12a",
+            "https://api.kcg.gov.tw/api/service/get/fc77ea43-d424-4618-b509-3b089b620470",
+            "https://api.kcg.gov.tw/api/service/get/ea43f985-546e-4347-9329-abebf464e9fb",
+            "https://api.kcg.gov.tw/api/service/get/2a803f78-3272-4bd4-a0a9-1d918fc6276c",
+            "https://api.kcg.gov.tw/api/service/get/f72b68ab-ad33-4c22-9e09-c520c40f3f2e",
+            "https://api.kcg.gov.tw/api/service/get/a548c991-54c0-41c7-8784-92d7fb157d00",
+            "https://api.kcg.gov.tw/api/service/get/df9d1d5a-a70a-4664-96b1-4af55ddf2d70",
+            "https://api.kcg.gov.tw/api/service/get/06d2f74e-0602-445f-b0de-6755a8696bb3",
+            "https://api.kcg.gov.tw/api/service/get/671f3133-fae1-41f4-afc4-4bae95c1889d"]
+    
+    def remove_question_marks(data):
+        for sublist in data:
+            for item in sublist:
+                for key in item:
+                    if isinstance(item[key], str):
+                        item[key] = re.sub(r'\s*\?.*', '', item[key])
+        return data
+    
+    for url in urls:
+        r = requests.get(url)
+        data1 = json.loads(r.text)
+        car_data.append(data1['data'])
+        car_data = remove_question_marks(car_data)
+    # Flatten the list of car_data
+    car_data = [item for sublist in car_data for item in sublist]
+
+    # Define a custom key function for sorting
+    def custom_sort_key(item):
+        date_str = item['發生日期']
+        date_obj = parse_chinese_datetime(date_str)
+        formatted_date_str = datetime.strftime(date_obj, "%Y/%m/%d %H:%M:%S")
+        return formatted_date_str
+
+    # Sort car_data by custom key function
+    sorted_data = sorted(car_data, key=custom_sort_key)
+
+    msg = "<h2>車禍資訊</h2><hr>"
+    msg += "<table><tr bgcolor=#aaaaaa><td>編號</td><td>發生日期</td><td>原因</td><td>事故類別</td><td>速限</td><td>路面狀態說明</td><td>天候說明</td></tr>"
+
+    for item in sorted_data:
+        if item['事故類型及型態說明'] and item['發生日期'] and item['事故類型及型態說明'] != "":
+            msg += "<tr bgcolor=#ffee33><td bgcolor=#aaaaaa>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(
+                item['seq'],
+                item['發生日期'],
+                item['事故類型及型態說明'],
+                item['事故類別'],
+                item['速限'],
+                item['路面狀態說明'],
+                item['天候說明']
+            )
+
     return HttpResponse(msg)
+
+def parse_chinese_datetime(datetime_str):
+    year = datetime_str.split('/')[0]
+    month = datetime_str.split('/')[1]
+    day = datetime_str.split('/')[2].split()[0]
+    time_str = extract_time(datetime_str)
+
+    if datetime_str.endswith('下午'):
+        hour = int(time_str.split(':')[0]) + 12
+        time_str = f"{hour}:{time_str.split(':')[1]}:{time_str.split(':')[2]}"
+
+    datetime_obj = datetime.strptime(f"{year}/{month}/{day} {time_str}", "%Y/%m/%d %H:%M:%S")
+    return datetime_obj
+
+def extract_time(datetime_str):
+    pattern = r'(\d+:\d+:\d+)'
+    match = re.search(pattern, datetime_str)
+    if match:
+        return match.group(1)
+        time_str = re.sub(r'\s*\?.*', '', time_str)
+    else:
+        return "12:00:00"
 
 def filtered_data(request):
     models.cardata.objects.all().delete()
