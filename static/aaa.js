@@ -1,9 +1,9 @@
 const canvas = document.getElementById('myChart');
 const data = {
-    labels: ['一月', 'February', 'March', 'April', 'May', 'June', 'June', 'June', 'June'],
+    labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
     datasets: [{
-        label: 'Sample Data',
-        data: [12, 19, 3, 5, 2, 3],
+        label: '交通事故次數',
+        data: [12, 19, 3, 5, 2, 3, 3, 3, 3, 3, 3, 3],
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
