@@ -98,11 +98,11 @@ def extract_time(datetime_str):
         return "12:00:00"
 
 def filtered_data(request):
-    models.cardata.objects.all().delete()
-    url = "https://api.kcg.gov.tw/api/service/get/ad197194-6db9-4f14-ad38-2adceea831c3"
-    r = requests.get(url)
-    data1 = json.loads(r.text)
-    car_data = data1["data"]
+    # models.cardata.objects.all().delete()
+    # url = "https://api.kcg.gov.tw/api/service/get/ad197194-6db9-4f14-ad38-2adceea831c3"
+    # r = requests.get(url)
+    # data1 = json.loads(r.text)
+    # car_data = data1["data"]
 
 
     # 過濾 HBicycleData 裡面的所有記錄，找出其中sbi>=10的站台放到data中
