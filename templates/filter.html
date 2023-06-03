@@ -1,24 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>交通事故的網站</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container">
-        <h2> 事故1</h2>
-        <hr>
-            <a class="btn btn-primary" href="/">首頁</a>
-            <a class="btn btn-warning" href="https://www.nkust.edu.tw">高科大</a>
-            <a class="btn btn-danger" href="/all/">新竹市公共自行車所有站</a>
-            <a class="btn btn-warning" href="/kcg_data/">事故2</a>
-        <hr>
-        {% for item in data1 %}
-          {{ item.seq }} : {{ item.事故年月 }} / {{ item.事故類型及型態說明 }}<br>
-        {% endfor %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>交通事故</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <title>交通事故的網站</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <h2> 死亡事故的網站</h2>
+    <hr>
+    <a class="btn btn-primary" href="/">首頁</a>
+    <a class="btn btn-warning" href="https://www.nkust.edu.tw">高科大</a>
+    <a class="btn btn-danger" href="/filter/">死亡事故</a>
+    <a class="btn btn-warning" href="/kcg_data/">整體事故</a>
+    <a class="btn btn-warning" href="/all/">事故折線圖</a>
+    <hr>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+    crossorigin="anonymous"></script>
+    <div class="overflow-scroll">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">seq</th>
+            <th scope="col">事故年月</th>
+            <th scope="col">總編號</th>
+            <th scope="col">案件編號</th>
+            <th scope="col">處理單位</th>
+            <th scope="col">單位名稱</th>
+            <th scope="col">事故類別</th>
+            <th scope="col">處理編號</th>
+            <th scope="col">發生日期</th>
+            <th scope="col">縣市</th>
+            <th scope="col">鄉鎮市區</th>
+            <th scope="col">村里</th>
+            <th scope="col">鄰</th>
+            <th scope="col">街路</th>
+            <th scope="col">段</th>
+            <th scope="col">街路交岔路</th>
+            <th scope="col">段交岔路</th>
+            <th scope="col">發生地點</th>
+            <th scope="col">公路</th>
+            <th scope="col">公里</th>
+            <th scope="col">天候說明</th>
+            <th scope="col">光線</th>
+            <th scope="col">光線說明</th>
+            <th scope="col">道路類別</th>
+            <th scope="col">道路說明</th>
+            <th scope="col">速限</th>
+            <th scope="col">道路型態</th>
+            <th scope="col">道路型態說明</th>
+            <th scope="col">事故位置</th>
+            <th scope="col">事故位置說明</th>
+            <th scope="col">路面鋪裝</th>
+            <th scope="col">路面鋪裝說明</th>
+            <th scope="col">路面狀態</th>
+            <th scope="col">路面狀態說明</th>
+            <th scope="col">路面缺陷</th>
+            <th scope="col">路面缺陷說明</th>
+            <th scope="col">障礙物</th>
+            <th scope="col">障礙物說明</th>
+            <th scope="col">視距</th>
+            <th scope="col">視距說明</th>
+            <th scope="col">號誌種類說明</th>
+            <th scope="col">號誌動作</th>
+            <th scope="col">號誌動作說明</th>
+            <th scope="col">分向設施</th>
+            <th scope="col">分向設施說明</th>
+            <th scope="col">快慢車道</th>
+            <th scope="col">快慢車道說明</th>
+            <th scope="col">路面邊線</th>
+            <th scope="col">路面邊線說明</th>
+            <th scope="col">事故類型及型態</th>
+            <th scope="col">事故類型及型態說明</th>
+            <th scope="col">2至30日死亡</th>
+            <th scope="col">監視影帶</th>
+            <th scope="col">x</th>
+            <th scope="col">y</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-  </body>
+    <h2>Chart</h2>
+    <div id="chart"></div>
+    <script>
+      var trace = {
+        x: Index(['seq', '事故年月', '總編號', '案件編號', '處理單位', '單位名稱', '事故類別', '處理編號', '發生日期',
+          '縣市', '鄉鎮市區', '村里', '鄰', '街路', '段', '街路交岔路', '段交岔路', '發生地點', '公路', '公里',
+          '公尺', '車道方向', '線', '公里平交道', '公尺平交道', '名稱平交道', '死亡人數', '受傷人數', '天候',
+          '天候說明', '光線', '光線說明', '道路類別', '道路說明', '速限', '道路型態', '道路型態說明', '事故位置',
+          '事故位置說明', '路面鋪裝', '路面鋪裝說明', '路面狀態', '路面狀態說明', '路面缺陷', '路面缺陷說明', '障礙物',
+          '障礙物說明', '視距', '視距說明', '號誌種類', '號誌種類說明', '號誌動作', '號誌動作說明', '分向設施',
+          '分向設施說明', '快車道', '快車道說明', '快慢車道', '快慢車道說明', '路面邊線', '路面邊線說明', '事故類型及型態',
+          '事故類型及型態說明', '2至30日死亡', '監視影帶', 'x', 'y'],
+          dtype = 'object'),
+        y: None,
+        type: 'bar'
+      };
+      var data = [trace];
+      Plotly.newPlot('chart', data);
+    </script>
+</body>
+
 </html>

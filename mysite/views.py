@@ -104,20 +104,6 @@ def filtered_data(request):
     data1 = json.loads(r.text)
     car_data = data1["data"]
 
-    for item in car_data:
-        # print("{}:{}/{}".format)(
-        #     item['seq'],
-        #     item['事故年月'],
-        #     item['事故類型及型態說明']
-        # )
-        new_record = models.cardata(
-            編號 = int(item['seq']),
-            發生日期 = item['事故年月'],
-            原因 = item['事故類型及型態說明']
-            )
-        new_record.save()
-        
-
 
     # 過濾 HBicycleData 裡面的所有記錄，找出其中sbi>=10的站台放到data中
     # data = models.cardata.filter()
@@ -128,3 +114,8 @@ def filtered_data(request):
 def kcg_data(request):
 
     return render(request, "kcg_data.html", locals())
+
+
+def all(request):
+
+    return render(request, "all.html", locals())
