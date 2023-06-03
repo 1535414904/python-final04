@@ -1,10 +1,10 @@
 from django.db import models
 
 class cardata(models.Model):
-    編號 = models.IntegerField(default=0)
-    發生日期 = models.CharField(max_length=100)
-    原因 = models.CharField(max_length=100)
+    serial_number = models.IntegerField(default=0)
+    date_of_occurrence = models.CharField(max_length=100)
+    reason = models.CharField(max_length=100)
     class Meta:
         ordering = ('編號',)
-    def __int__(self):
-        return self.編號
+    def __str__(self):
+        return self.serial_number
