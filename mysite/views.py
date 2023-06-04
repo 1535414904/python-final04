@@ -159,7 +159,7 @@ def filtered_data(request):
     plt.title('車禍類別', fontproperties=font)
 
     
-    chart_image_path = "C:/pythonfinal04/1.png"
+    chart_image_path = "C:/python-final04/1.png"
     plt.savefig(chart_image_path)
     with open(chart_image_path, 'rb') as f:
         chart_image_data = f.read()
