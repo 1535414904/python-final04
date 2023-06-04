@@ -98,18 +98,75 @@ def extract_time(datetime_str):
         return "12:00:00"
 
 def filtered_data(request):
-    # models.cardata.objects.all().delete()
-    # url = "https://api.kcg.gov.tw/api/service/get/ad197194-6db9-4f14-ad38-2adceea831c3"
-    # r = requests.get(url)
-    # data1 = json.loads(r.text)
-    # car_data = data1["data"]
+    
+    os.makedirs(settings.STATIC_ROOT, exist_ok=True)
+    car_data = []
+    urls = [
+            "https://api.kcg.gov.tw/api/service/get/0ba09913-7e69-469f-b7eb-1140e493d0a0",
+            "https://api.kcg.gov.tw/api/service/get/1a31f2d8-7b7e-4802-a06e-b262a9f68983",
+            "https://api.kcg.gov.tw/api/service/get/d480fcaf-a9d1-42cd-a36b-6f248c30fe7d",
+            "https://api.kcg.gov.tw/api/service/get/a61991be-6ebe-471c-a62f-ad293f23d12a",
+            "https://api.kcg.gov.tw/api/service/get/fc77ea43-d424-4618-b509-3b089b620470",
+            "https://api.kcg.gov.tw/api/service/get/ea43f985-546e-4347-9329-abebf464e9fb",
+            "https://api.kcg.gov.tw/api/service/get/2a803f78-3272-4bd4-a0a9-1d918fc6276c",
+            "https://api.kcg.gov.tw/api/service/get/f72b68ab-ad33-4c22-9e09-c520c40f3f2e",
+            "https://api.kcg.gov.tw/api/service/get/a548c991-54c0-41c7-8784-92d7fb157d00",
+            "https://api.kcg.gov.tw/api/service/get/df9d1d5a-a70a-4664-96b1-4af55ddf2d70",
+            "https://api.kcg.gov.tw/api/service/get/06d2f74e-0602-445f-b0de-6755a8696bb3",
+            "https://api.kcg.gov.tw/api/service/get/671f3133-fae1-41f4-afc4-4bae95c1889d"
+            ]
+    
+    def remove_question_marks(data):
+        for sublist in data:
+            for item in sublist:
+                for key in item:
+                    if isinstance(item[key], str):
+                        item[key] = re.sub(r'\s*\?.*', '', item[key])
+        return data
+    
+    for url in urls:
+        r = requests.get(url)
+        data1 = json.loads(r.text)
+        car_data.append(data1['data'])
+    car_data = remove_question_marks(car_data)
+    car_data = [item for sublist in car_data for item in sublist]
 
+    def custom_sort_key(item):
+        date_str = item['發生日期']
+        date_obj = parse_chinese_datetime(date_str)
+        formatted_date_str = datetime.strftime(date_obj, "%Y/%m/%d %H:%M:%S")
+        return formatted_date_str
+    sorted_data = sorted(car_data, key=custom_sort_key)
+    a1 = 0
+    a2 = 0
+    a3 = 0
 
-    # 過濾 HBicycleData 裡面的所有記錄，找出其中sbi>=10的站台放到data中
-    # data = models.cardata.filter()
-    return render(request, "filter.html", locals())
+    for item in sorted_data:
+        if item['事故類別'] != "":
+            if item['事故類別'] == "A1":
+                a1 += 1
+            elif item['事故類別'] == "A2":
+                a2 += 1
+            else:
+                a3 += 1
 
-     
+    labels = ['A1', 'A2', 'A3']
+    sizes = [a1, a2, a3]
+    colors = ['#ff9999', '#66b3ff', '#99ff99']
+    explode = (0.1, 0, 0)  # Highlight the first sector
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    plt.axis('equal')  # Make the pie chart circular
+    plt.title('車禍類別', fontproperties=font)
+
+    
+    chart_image_path = "C:/pythonfinal04/1.png"
+    plt.savefig(chart_image_path)
+    with open(chart_image_path, 'rb') as f:
+        chart_image_data = f.read()
+    chart_image_base64 = base64.b64encode(chart_image_data).decode('utf-8')
+    chart_image_src = f"data:image/png;base64,{chart_image_base64}"
+    return render(request, 'filter.html', {'chart_image_src': chart_image_src})
+
 
 def kcg_data(request):
 
