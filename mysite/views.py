@@ -7,6 +7,7 @@ import random     # 匯入隨機模組
 from datetime import datetime
 from itertools import chain
 import re 
+import os
 
 def index(request):
     mynames = ["第四組"]
