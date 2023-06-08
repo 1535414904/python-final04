@@ -111,3 +111,7 @@ def kcg_data(request):
 def all(request):
 
     return render(request, "all.html", context={'data': models.cardata.objects.all()})
+
+def die(request):
+
+    return render(request, "die.html")
