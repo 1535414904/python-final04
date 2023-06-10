@@ -3,10 +3,10 @@ const data = {
     labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
     datasets: [{
         label: '交通事故次數',
-        data: [12, 19, 3, 5, 2, 3, 3, 3, 3, 3, 3, 3],
+        data: [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12],
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        tension: 0
     }]
 };
 const ctx = canvas.getContext('2d');

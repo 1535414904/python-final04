@@ -105,13 +105,36 @@ def filtered_data(request):
 
 def kcg_data(request):
 
-    return render(request, "kcg_data.html")
+    return render(request, "kcg_data.html", context={'data': models.cardata.objects.all()})
 
 
 def all(request):
-
-    return render(request, "all.html", context={'data': models.cardata.objects.all()})
+    m1=len(models.cardata.objects.filter(accident_year_month__month='01'))
+    m2=len(models.cardata.objects.filter(accident_year_month__month='02'))
+    m3=len(models.cardata.objects.filter(accident_year_month__month='03'))
+    m4=len(models.cardata.objects.filter(accident_year_month__month='04'))
+    m5=len(models.cardata.objects.filter(accident_year_month__month='05'))
+    m6=len(models.cardata.objects.filter(accident_year_month__month='06'))
+    m7=len(models.cardata.objects.filter(accident_year_month__month='07'))
+    m8=len(models.cardata.objects.filter(accident_year_month__month='08'))
+    m9=len(models.cardata.objects.filter(accident_year_month__month='09'))
+    m10=len(models.cardata.objects.filter(accident_year_month__month='10'))
+    m11=len(models.cardata.objects.filter(accident_year_month__month='11'))
+    m12=len(models.cardata.objects.filter(accident_year_month__month='12'))
+    
+    return render(request, "all.html", context={'m1':m1,
+                                                'm2':m2,
+                                                'm3':m3,
+                                                'm4':m4,
+                                                'm5':m5,
+                                                'm6':m6,
+                                                'm7':m7,
+                                                'm8':m8,
+                                                'm9':m9,
+                                                'm10':m10,
+                                                'm11':m11,
+                                                'm12':m12,})
 
 def die(request):
-
-    return render(request, "die.html")
+    a1=models.cardata.objects.filter(death_toll__gte=1)
+    return render(request, "die.html",context={'data': a1})
